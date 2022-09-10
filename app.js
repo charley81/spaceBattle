@@ -1,87 +1,102 @@
 // soldier class
-class Soldier {
-  constructor(name, hull, firepower, accuracy) {
-    this.name = name
-    this.hull = hull
-    this.firepower = firepower
-    this.accuracy = accuracy
-  }
-  attack(alien) {
-    if (alien) {
-      alien.hull -= this.firepower
-      console.log(`Soldier attacked ${alien.name}`)
-
-      if (alien.hull <= 0) {
-        aliens.shift()
-        if (this.hull > 0) {
-          alien.attack(user)
-        }
-      } else {
-        alien.attack(user)
-      }
-    } else {
-      alert('Game Over Soldier Won')
-    }
-  }
+const soldier = {
+  type: 'soldier',
+  name: 'SGT Smith',
+  health: 20,
+  power: 5,
+  accuracy: 0.7,
 }
 
-// alien class
-class Alien extends Soldier {
-  constructor(name) {
-    super(name)
-    this.name = name
-    this.hull = Math.floor(Math.random() * 4) + 3
-    this.firepower = Math.floor(Math.random() * 3) + 2
-    this.accuracy = (Math.floor(Math.random() * 3) + 6) / 10
-  }
-  attack(user) {
-    user.hull -= this.firepower
-    console.log(`${this.name} attacked Soldier`)
-    if (user.hull <= 0) {
-      alert('Game Over: Soldier Lost')
-    } else {
-      const input = confirm('Do you want to attack')
-      if (input) {
-        user.attack(aliens.find(alien => alien.hull > 0))
-      } else {
-        alert('Game Over')
-      }
-    }
-  }
-}
-
-// user instance
-const user = new Soldier('User', 20, 5)
-
-// aliens
 const aliens = [
-  new Alien('Alien 1'),
-  new Alien('Alien 2'),
-  new Alien('Alien 3'),
-  new Alien('Alien 4'),
-  new Alien('Alien 5'),
-  new Alien('Alien 6'),
+  {
+    type: 'alien',
+    name: 'Xanthe',
+    health: Math.floor(Math.random() * 4) + 3,
+    power: Math.floor(Math.random() * 3) + 2,
+    accuracy: (Math.floor(Math.random() * 3) + 6) / 10,
+  },
+  {
+    type: 'alien',
+    name: 'Adzoa',
+    health: Math.floor(Math.random() * 4) + 3,
+    power: Math.floor(Math.random() * 3) + 2,
+    accuracy: (Math.floor(Math.random() * 3) + 6) / 10,
+  },
+  {
+    type: 'alien',
+    name: 'Xanthe',
+    health: Math.floor(Math.random() * 4) + 3,
+    power: Math.floor(Math.random() * 3) + 2,
+    accuracy: (Math.floor(Math.random() * 3) + 6) / 10,
+  },
+  {
+    type: 'alien',
+    name: 'Ozanka',
+    health: Math.floor(Math.random() * 4) + 3,
+    power: Math.floor(Math.random() * 3) + 2,
+    accuracy: (Math.floor(Math.random() * 3) + 6) / 10,
+  },
+  {
+    type: 'alien',
+    name: 'Orin',
+    health: Math.floor(Math.random() * 4) + 3,
+    power: Math.floor(Math.random() * 3) + 2,
+    accuracy: (Math.floor(Math.random() * 3) + 6) / 10,
+  },
+  {
+    type: 'alien',
+    name: 'Xalvadora',
+    health: Math.floor(Math.random() * 4) + 3,
+    power: Math.floor(Math.random() * 3) + 2,
+    accuracy: (Math.floor(Math.random() * 3) + 6) / 10,
+  },
 ]
 
-alert('Hello soldier, welcome to your mission. You must kill all the aliens')
-const input = confirm('Would you like to attack?')
-
-if (input) {
-  user.attack(aliens.find(alien => alien.hull > 0))
+// set the name and stats of each player
+const setNameAndStats = (player, enemy) => {
+  const attacker = document.querySelector(`.${player.type}`)
+  const attacked = document.querySelector(`.${enemy.type}`)
+  attacker.querySelector('.name').textContent = player.name
+  attacked.querySelector('.name').textContent = enemy.name
+  attacker.querySelector('.health').textContent = `Health: ${player.health}`
+  attacked.querySelector('.health').textContent = `Health: ${enemy.health}`
+  attacker.querySelector('.power').textContent = `Power: ${player.power}`
+  attacked.querySelector('.power').textContent = `Power: ${enemy.power}`
+  attacker.querySelector(
+    '.accuracy'
+  ).textContent = `Accuracy: ${player.accuracy}`
+  attacked.querySelector(
+    '.accuracy'
+  ).textContent = `Accuracy: ${enemy.accuracy}`
 }
 
-// You attack the first alien ship
+// create alert or confirm with a custom message
+const callMessage = (type, message) => {
+  if (type === 'alert') {
+    alert(message)
+  } else if (type === 'confirm') {
+    confirm(message)
+  } else {
+    console.error('no message entered')
+  }
+}
 
-// If the ship survives, it attacks you
+// call attack
+const callAttack = (player, enemy) => {
+  if (Math.random() < player.accuracy) {
+    callMessage('alert', `${player.name} just attacked ${enemy.name}`)
+  } else {
+    callMessage('alert', 'You Missed!')
+  }
 
-// If you survive, you attack the ship again
+  enemy.health -= player.power
+  // Check the player.type to set their name and stats in the UI
+  player.type === 'soldier'
+    ? setNameAndStats(player, enemy)
+    : setNameAndStats(enemy, player)
+}
 
-// If it survives, it attacks you again … etc
-
-// If you destroy the ship, you have the option to attack the next ship or to retreat
-
-// If you retreat, the game is over, perhaps leaving the game open for further developments or options
-
-// You win the game if you destroy all of the aliens
-
-// You lose the game if you are destroyed
+// loop over the aliens to start battle
+aliens.forEach(alien => {
+  callAttack(soldier, alien)
+})

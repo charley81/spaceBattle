@@ -4,33 +4,37 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- local stylesheet -->
     <link rel="stylesheet" href="./style.css" />
     <title>spaceBattle</title>
   </head>
+
   <body>
     <div class="container">
       <!-- solider -->
       <div class="soldier card box-shadow">
-        <h1>Soldier</h1>
         <img src="./images/soldier.jpeg" alt="" />
+        <h1 class="name">Soldier</h1>
         <div class="stats">
-          <h3>Hull: 15</h3>
-          <h3>FirePower: 5</h3>
-          <h3>Accuracy: 0.7</h3>
+          <h3 class="health">Health: 15</h3>
+          <h3 class="power">Power: 5</h3>
+          <h3 class="accuracy">Accuracy: 0.7</h3>
         </div>
       </div>
 
       <!-- alien -->
       <div class="alien card">
-        <h1>Alien</h1>
-        <img src="./images/monster.jpeg" alt="" />
+        <img src="./images/alien.jpeg" alt="" />
+        <h1 class="name">Alien</h1>
         <div class="stats">
-          <h3>Hull: 6</h3>
-          <h3>FirePower: 3</h3>
-          <h3>Accuracy: 0.6</h3>
+          <h3 class="health">Health: 6</h3>
+          <h3 class="power">Power: 3</h3>
+          <h3 class="accuracy">Accuracy: 0.6</h3>
         </div>
       </div>
     </div>
+
+    <!-- local js file -->
     <script src="./app.js"></script>
   </body>
 </html>
