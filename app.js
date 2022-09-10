@@ -52,51 +52,61 @@ const aliens = [
   },
 ]
 
-// set the name and stats of each player
-const setNameAndStats = (player, enemy) => {
-  const attacker = document.querySelector(`.${player.type}`)
-  const attacked = document.querySelector(`.${enemy.type}`)
-  attacker.querySelector('.name').textContent = player.name
-  attacked.querySelector('.name').textContent = enemy.name
-  attacker.querySelector('.health').textContent = `Health: ${player.health}`
-  attacked.querySelector('.health').textContent = `Health: ${enemy.health}`
-  attacker.querySelector('.power').textContent = `Power: ${player.power}`
-  attacked.querySelector('.power').textContent = `Power: ${enemy.power}`
-  attacker.querySelector(
-    '.accuracy'
-  ).textContent = `Accuracy: ${player.accuracy}`
-  attacked.querySelector(
-    '.accuracy'
-  ).textContent = `Accuracy: ${enemy.accuracy}`
-}
-
-// create alert or confirm with a custom message
-const callMessage = (type, message) => {
-  if (type === 'alert') {
-    alert(message)
-  } else if (type === 'confirm') {
-    confirm(message)
-  } else {
-    console.error('no message entered')
-  }
-}
-
-// call attack
-const callAttack = (player, enemy) => {
-  if (Math.random() < player.accuracy) {
-    callMessage('alert', `${player.name} just attacked ${enemy.name}`)
-  } else {
-    callMessage('alert', 'You Missed!')
+setTimeout(() => {
+  // set the name and stats of each player
+  const setNameAndStats = (player, enemy) => {
+    const attacker = document.querySelector(`.${player.type}`)
+    const attacked = document.querySelector(`.${enemy.type}`)
+    attacker.querySelector('.name').textContent = player.name
+    attacked.querySelector('.name').textContent = enemy.name
+    attacker.querySelector('.health').textContent = `Health: ${player.health}`
+    attacked.querySelector('.health').textContent = `Health: ${enemy.health}`
+    attacker.querySelector('.power').textContent = `Power: ${player.power}`
+    attacked.querySelector('.power').textContent = `Power: ${enemy.power}`
+    attacker.querySelector(
+      '.accuracy'
+    ).textContent = `Accuracy: ${player.accuracy}`
+    attacked.querySelector(
+      '.accuracy'
+    ).textContent = `Accuracy: ${enemy.accuracy}`
   }
 
-  enemy.health -= player.power
-  // Check the player.type to set their name and stats in the UI
-  player.type === 'soldier'
-    ? setNameAndStats(player, enemy)
-    : setNameAndStats(enemy, player)
-}
+  // create alert or confirm with a custom message
+  const callMessage = (type, message) => {
+    if (type === 'alert') {
+      return alert(message)
+    } else if (type === 'confirm') {
+      return confirm(message)
+    } else {
+      console.error('no input')
+    }
+  }
 
-// loop over the aliens to start battle
-aliens.forEach(alien => {
-  callAttack(soldier, alien)
-})
+  // call attack
+  const callAttack = (player, enemy) => {
+    if (Math.random() < player.accuracy) {
+      callMessage('alert', `${player.name} just attacked ${enemy.name}`)
+    } else {
+      callMessage('alert', 'You Missed!')
+    }
+
+    enemy.health -= player.power
+    // Check the player.type to set their name and stats in the UI
+    player.type === 'soldier'
+      ? setNameAndStats(player, enemy)
+      : setNameAndStats(enemy, player)
+  }
+
+  const input = callMessage('confirm', 'click ok to get started')
+
+  setTimeout(() => {
+    if (input) {
+      // loop over the aliens to start battle
+      aliens.forEach(alien => {
+        callAttack(soldier, alien)
+      })
+    } else {
+      callMessage('alert', 'Later!')
+    }
+  }, 1000)
+}, 1000)
