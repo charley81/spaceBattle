@@ -8,10 +8,11 @@ setTimeout(() => {
         this.accuracy = 0.7
       }
 
-      attack(enemy) {
-        if (Math.random() < enemy.accuracy) {
-          console.log(`${this.name} attacked ${enemy.name}`)
-          enemy.health -= this.power
+      attack(alien) {
+        if (Math.random() < alien.accuracy) {
+          console.log(`${this.name} attacked ${alien.name}`)
+          alien.health -= this.power
+          checkBattle(alien)
         }
         console.log(`${this} missed`)
       }
@@ -30,12 +31,18 @@ setTimeout(() => {
       }
     }
 
-    // const checkBattle = (soldier, aliens) => {
-    //   if (soldier.healt <= 0 || aliens.every(alien => alien.healt <= 0)) {
-    //     const winner = soldier.healt <= 0 ? 'Aliens' : 'Soldier'
-    //     alert(`Game Over: ${winner} won`)
-    //   }
-    // }
+    const checkBattle = alien => {
+      if (sgtSmith.health <= 0 || aliens.every(alien => alien.health <= 0)) {
+        const winner = sgtSmith.health <= 0 ? 'Aliens' : 'Soldier'
+        alert(`Game Over: ${winner} won`)
+      } else {
+        if (alien.health > 0) {
+          alien.attack(sgtSmith)
+        } else {
+          aliens.shift()
+        }
+      }
+    }
 
     const sgtSmith = new Soldier('SGT Smith')
     const aliens = [
@@ -50,6 +57,9 @@ setTimeout(() => {
     aliens.forEach(alien => {
       sgtSmith.attack(alien)
     })
+
+    const aliensLength = aliens.length
+    console.log(aliensLength)
   } else {
     alert('Refresh the page if you change your mind')
   }
