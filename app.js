@@ -1,124 +1,86 @@
-// function to generate random numbers for alien health, power, and accuracy
-const randomNumber = (min, max) => {
-  return Math.floor(Math.random() * (max - min)) + min
+// soldier class
+class Soldier {
+  constructor(name) {
+    this.name = name
+    this.health = 20
+    this.power = 5
+    this.accuracy = 0.7
+  }
+
+  attack(enemy) {
+    console.log(`${this.name} is attacking ${enemy.name}`)
+    if (Math.random() < enemy.accuracy) {
+      enemy.health -= this.power
+      if (enemy.health <= 0) {
+        console.log(`${enemy.name} has been destroyed`)
+        confirm('Click ok to attack the next alien')
+      }
+    } else {
+      console.log(`You missed ${enemy.name}`)
+    }
+  }
 }
 
-// player class to generate aliens and soldier
-class Player {
-  constructor(name, health, power, accuracy) {
+// alien class
+class Alien {
+  constructor(name) {
     this.name = name
-    this.health = health
-    this.power = power
-    this.accuracy = accuracy
+    this.health = Math.floor(Math.random() * (6 - 3)) + 3
+    this.power = Math.floor(Math.random() * (4 - 2)) + 2
+    this.accuracy = Number((Math.random() * (0.8 - 0.6) + 0.6).toFixed(1))
   }
 
-  hitAccuracy(accuracy) {
-    Math.random() < accuracy ? true : false
+  attack(enemy) {
+    console.log(`${this.name} is attacking ${enemy.name}`)
+    if (Math.random() < enemy.accuracy) {
+      enemy.health -= this.power
+      if (sgtSmith.health > 0) {
+        console.log(`You've been hit. You health is ${sgtSmith.health}`)
+      } else {
+        alert(`Game Over: ${sgtSmith.name} lost`)
+      }
+    } else {
+      console.log(`${this.name} missed. You health is ${sgtSmith.health}`)
+    }
   }
+}
+
+// array of alian instances
+const aliens = [
+  new Alien('Xanthe'),
+  new Alien('Adzoa'),
+  new Alien('Bhura'),
+  new Alien('Ralet'),
+  new Alien('Brel'),
+  new Alien('Ozanka'),
+]
+
+// soldier instance
+const sgtSmith = new Soldier('SGT Smith')
+
+// game intro
+function gameIntro() {
+  const input = confirm(`Welcome to spaceBattle. Click ok to start`)
+  input ? playGame() : alert('later...')
+}
+
+// playGame
+function playGame() {
+  aliens.forEach(alien => {
+    if (!destroyed(alien)) {
+      sgtSmith.attack(alien)
+      if (!destroyed(alien)) {
+        alien.attack(sgtSmith)
+      }
+    }
+  })
+}
+
+// check if ship is destroyed
+function destroyed(player) {
+  player.health <= 0 ? true : false
 }
 
 setTimeout(() => {
-  // object where the magic happens
-  const BattleGround = {
-    createPlayers() {
-      this.aliens = [
-        new Player(
-          'Xanthe',
-          randomNumber(3, 6),
-          randomNumber(2, 4),
-          randomNumber(0.6, 0.8)
-        ),
-        new Player(
-          'Adzoa',
-          randomNumber(3, 6),
-          randomNumber(2, 4),
-          randomNumber(0.6, 0.8)
-        ),
-        new Player(
-          'Bhura',
-          randomNumber(3, 6),
-          randomNumber(2, 4),
-          randomNumber(0.6, 0.8)
-        ),
-        new Player(
-          'Ralet',
-          randomNumber(3, 6),
-          randomNumber(2, 4),
-          randomNumber(0.6, 0.8)
-        ),
-        new Player(
-          'Brel',
-          randomNumber(3, 6),
-          randomNumber(2, 4),
-          randomNumber(0.6, 0.8)
-        ),
-        new Player(
-          'Ozanka',
-          randomNumber(3, 6),
-          randomNumber(2, 4),
-          randomNumber(0.6, 0.8)
-        ),
-      ]
-      this.sgtSmith = new Player('SGT Smith', 20, 5, 0.7)
-    },
-    gameIntro() {
-      this.createPlayers()
-      alert('Welcome to spaceBattle')
-      const input = confirm('Click ok to play')
-      input ? this.playGame() : alert('later...')
-    },
-    playGame() {
-      while (
-        this.sgtSmith.health > 0 &&
-        this.aliens.some(alien => alien.health > 0)
-      ) {
-        this.aliens.forEach(alien => {
-          if (!this.destroyed(alien)) {
-            this.soldierAttack(alien)
-            if (!this.destroyed(alien)) {
-              this.alienAttack(alien)
-            }
-          }
-        })
-      }
-    },
-    soldierAttack(enemy) {
-      console.log(`${this.name} is attacking ${enemy.name}`)
-      if (this.sgtSmith.hitAccuracy(this.sgtSmith.accuracy)) {
-        enemy.health -= this.sgtSmith.firepower
-        if (enemy.health <= 0) {
-          console.log(`You destroyed ${enemy.name}`)
-        } else {
-          console.log(
-            `You attacked ${enemy.name} and their health is now ${enemy.health}`
-          )
-        }
-      } else {
-        console.log(`You missed the target`)
-      }
-    },
-    alienAttack(attacker) {
-      console.log(`You are being attacked by ${attacker.name}`)
-      if (attacker.hitAccuracy(attacker.accuracy)) {
-        this.sgtSmith.health -= attacker.power
-        if (this.sgtSmith.health > 0) {
-          console.log(
-            `You've been hit and you health is now ${sgtSmith.health}`
-          )
-        } else {
-          alert(`Game Over: The aliens have taken over`)
-        }
-      } else {
-        console.log(`The missed you and you health is ${this.sgtSmith.health}`)
-      }
-    },
-    destroyed(player) {
-      if (player.health <= 0) {
-        return true
-      }
-      return false
-    },
-  }
-
-  BattleGround.gameIntro()
+  gameIntro()
 }, 1000)
